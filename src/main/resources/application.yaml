@@ -1,0 +1,18 @@
+# Server      
+server:
+  port: 8080
+  context-path: /nhs-scrapper
+    
+# Logging  
+logging:
+  pattern:
+    console: '%d{dd-MM-yyyy HH:mm:ss.SSS} %p --- %c.%M[%L] - %m%n'
+  level:
+    com.sk.babylon: DEBUG
+    org.springframework: INFO
+    
+nhs:
+  root: http://www.nhs.uk/Conditions/Pages/hub.aspx
+  index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
+  data:
+    file: classpath:data/data.json
