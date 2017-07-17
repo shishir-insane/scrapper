@@ -18,6 +18,7 @@ public final class Constants {
     public static final String TITLE_DATA_FIELD = "Title";
     public static final String INRO_DATA_FIELD = "Introduction";
     public static final String URL_FIELD = "URL";
+    public static final String DATA_REFRESH_PARAM = "data-refresh";
 
     private Constants() {
         // hidden constructor

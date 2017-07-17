@@ -3,8 +3,6 @@ package com.sk.babylon.util;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,14 +15,16 @@ public final class Utils {
         // Hidden constructor
     }
 
-    public static String regularizeHttpInUrl(final String url, final String baseUrl) throws UnsupportedEncodingException {
+    public static String regularizeHttpInUrl(final String url, final String baseUrl)
+            throws UnsupportedEncodingException {
         String regularizedUrl = null;
         if (!StringUtils.startsWith(url, Constants.HTTP_TAG)) {
             regularizedUrl = new StringBuilder(Constants.HTTP_TAG).append(getHostUrl(baseUrl)).append(url).toString();
         } else {
             regularizedUrl = url;
         }
-        // URLEncoder.encode(StringUtils.defaultString(regularizedUrl), StandardCharsets.UTF_8.name());
+        // URLEncoder.encode(StringUtils.defaultString(regularizedUrl),
+        // StandardCharsets.UTF_8.name());
         return StringUtils.defaultString(regularizedUrl);
     }
 

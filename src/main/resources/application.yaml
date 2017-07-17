@@ -16,3 +16,31 @@ nhs:
   index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
   data:
     file: classpath:data/data.json
+    stopwords: classpath:data/stopwords.txt
+
+spring:
+  profiles:
+    active: no-data-refresh
+    
+---
+
+spring:
+  profiles: data-refresh
+nhs:
+  root: http://www.nhs.uk/Conditions/Pages/hub.aspx
+  index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
+  data:
+    refresh: true
+    file: classpath:data/data.json
+    stopwords: classpath:data/stopwords.txt
+    
+---
+spring:
+  profiles: no-data-refresh
+nhs:
+  root: http://www.nhs.uk/Conditions/Pages/hub.aspx
+  index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
+  data:
+    refresh: false
+    file: classpath:data/data.json
+    stopwords: classpath:data/stopwords.txt

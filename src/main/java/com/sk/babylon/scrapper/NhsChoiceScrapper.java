@@ -1,6 +1,7 @@
 package com.sk.babylon.scrapper;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -9,7 +10,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,17 +37,34 @@ public class NhsChoiceScrapper {
     @Value("${nhs.data.file}")
     private String nhsDataFilePath;
 
+    @Value("${nhs.data.refresh}")
+    private String nhsDataRefresh;
+
+    @Value("${nhs.data.stopwords}")
+    private String nhsStopWordsFilePath;
+
     @Autowired
     private ApplicationContext context;
 
     @PostConstruct
     @Profiled
     public void startScrapping() throws IOException, JSONException {
-        final JSONObject result = doScraping();
-        if (null != result) {
-            final Resource resource = context.getResource(nhsDataFilePath);
-            try (BufferedWriter writer = Files.newBufferedWriter(resource.getFile().toPath())) {
-                writer.write(result.toString());
+        final Resource resource = context.getResource(nhsDataFilePath);
+        if (StringUtils.equalsIgnoreCase(nhsDataRefresh, "true") || !resource.exists()) {
+            final JSONObject result = doScraping();
+            log.info(result.toString());
+            if (null != result) {
+                if (!resource.exists()) {
+                    final String dataFileName = StringUtils.substringAfterLast(nhsDataFilePath, "/");
+                    final File dataFile = new File(context.getResource(nhsStopWordsFilePath).getFile().getParentFile(),
+                            dataFileName);
+                    dataFile.createNewFile();
+                }
+                try (BufferedWriter writer = Files.newBufferedWriter(resource.getFile().toPath())) {
+                    writer.write(result.toString());
+                } catch (final Exception e) {
+                    log.error("Error in populating data file", e);
+                }
             }
         }
     }
@@ -70,7 +87,7 @@ public class NhsChoiceScrapper {
                 final String conditionName = condition.text().replaceAll(Constants.NO_BREAK_SPACE, StringUtils.EMPTY);
                 final String conditionUrl = condition.attr(Constants.HREAF_TAG);
                 if (conditionUrl.toLowerCase().contains(Constants.CONDITION_URL_PART)) {
-                    log.info("Scrapping: {}", conditionName);
+                    log.info("Scrapping: {} - {}", index, conditionName);
                     result.put(conditionName, doScrappingOnConditionPage(conditionUrl));
                 }
             }
@@ -139,11 +156,10 @@ public class NhsChoiceScrapper {
         if (StringUtils.isNotBlank(url)) {
             try {
                 document = Jsoup.connect(Utils.regularizeHttpInUrl(url, nhsIndexURL)).followRedirects(true).get();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 log.error("Error while fetching content for {}", url, e);
             }
         }
         return document;
     }
-
 }

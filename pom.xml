@@ -25,6 +25,7 @@
 		<org.jsoup.version>1.10.3</org.jsoup.version>
 		<apache.lang.version>3.6</apache.lang.version>
 		<json.version>20170516</json.version>
+		<nlp.version>3.8.0</nlp.version>
 	</properties>
 
 	<dependencies>
@@ -91,10 +92,19 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>${json.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>${nlp.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
