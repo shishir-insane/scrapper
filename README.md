@@ -1,7 +1,10 @@
 # nhs-scrapper
 
 ###Run with data refresh:
+
+```
 mvn spring-boot:run -Drun.profiles=data-refresh
+```
 
 ###Run without data refresh:
 ###mvn spring-boot:run
