@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +29,9 @@ import com.sk.babylon.util.Constants;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class NhsChoiceScrapper.
+ */
 @Component
 @Slf4j
 public class NhsChoiceScrapper {
@@ -46,13 +47,21 @@ public class NhsChoiceScrapper {
 
     @Value("${nhs.data.stopwords}")
     private String nhsStopWordsFilePath;
-    
+
     @Value("${nhs.data.thread.count}")
     private int numberOfThreads;
 
     @Autowired
     private ApplicationContext context;
 
+    /**
+     * Start scrapping.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws JSONException
+     *             the JSON exception
+     */
     @PostConstruct
     @Profiled
     public void startScrapping() throws IOException, JSONException {
@@ -76,6 +85,11 @@ public class NhsChoiceScrapper {
         }
     }
 
+    /**
+     * Do scraping.
+     *
+     * @return the JSON object
+     */
     @SuppressWarnings("unchecked")
     public JSONObject doScraping() {
         final JSONObject resultData = new JSONObject();
@@ -86,7 +100,7 @@ public class NhsChoiceScrapper {
                 tasks.add(new NhsChoiceWorker(String.valueOf(c), nhsIndexURL));
             }
             tasks.add(new NhsChoiceWorker(Constants.DIGITS_INDEX_TEXT, nhsIndexURL));
-            
+
             final List<Future<JSONObject>> futures = executorService.invokeAll(tasks);
             for (final Future<JSONObject> future : futures) {
                 resultData.putAll(future.get(10, TimeUnit.MINUTES));
@@ -95,9 +109,8 @@ public class NhsChoiceScrapper {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             log.error("Error while scrapping", e);
         }
-        
+
         return resultData;
     }
 
-    
 }

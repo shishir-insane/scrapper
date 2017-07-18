@@ -8,19 +8,37 @@ import org.springframework.util.StopWatch;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class LoggerAspect.
+ */
 @Component
 @Slf4j
 public class LoggerAspect {
 
+    /**
+     * Request mapping.
+     */
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestMapping() {
     }
 
+    /**
+     * Profiled.
+     */
     @Pointcut("@annotation(com.sk.babylon.log.Profiled)")
     public void profiled() {
 
     }
 
+    /**
+     * Profile.
+     *
+     * @param pjp
+     *            the pjp
+     * @return the object
+     * @throws Throwable
+     *             the throwable
+     */
     @Around("requestMapping() || profiled()")
     public Object profile(final ProceedingJoinPoint pjp) throws Throwable {
         final StopWatch sw = new StopWatch();

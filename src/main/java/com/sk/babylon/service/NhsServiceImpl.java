@@ -28,6 +28,9 @@ import com.sk.babylon.stemmer.Stemmer;
 import edu.stanford.nlp.ling.Word;
 import edu.stanford.nlp.process.PTBTokenizer;
 
+/**
+ * The Class NhsServiceImpl.
+ */
 @Service
 public class NhsServiceImpl implements NhsService {
 
@@ -43,6 +46,16 @@ public class NhsServiceImpl implements NhsService {
     private JSONObject nhsData;
     private Set<String> stopwords;
 
+    /**
+     * Inits the.
+     *
+     * @throws FileNotFoundException
+     *             the file not found exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             the parse exception
+     */
     @PostConstruct
     public void init() throws FileNotFoundException, IOException, ParseException {
         final JSONParser parser = new JSONParser();
@@ -60,6 +73,11 @@ public class NhsServiceImpl implements NhsService {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.sk.babylon.service.NhsService#getDataForChoice(java.lang.String)
+     */
     @Override
     public JSONObject getDataForChoice(final String query) {
         final JSONObject result = new JSONObject();
@@ -70,6 +88,13 @@ public class NhsServiceImpl implements NhsService {
         return result;
     }
 
+    /**
+     * Extract nouns from query.
+     *
+     * @param query
+     *            the query
+     * @return the sets the
+     */
     private Set<String> extractNounsFromQuery(final String query) {
         final Iterator<Word> words = PTBTokenizer.newPTBTokenizer(new StringReader(query.toLowerCase()));
         final Stemmer stemmer = new Stemmer();
@@ -89,6 +114,17 @@ public class NhsServiceImpl implements NhsService {
         return bagOfWords;
     }
 
+    /**
+     * Search keywords in data cache.
+     *
+     * @param data
+     *            the data
+     * @param keywords
+     *            the keywords
+     * @param depth
+     *            the depth
+     * @return the object
+     */
     private Object searchKeywordsInDataCache(final JSONObject data, final Set<String> keywords, final int depth) {
         if (depth == 2) {
             return data;

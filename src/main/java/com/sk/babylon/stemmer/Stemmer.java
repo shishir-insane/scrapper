@@ -3,22 +3,19 @@ package com.sk.babylon.stemmer;
 import edu.stanford.nlp.ling.Word;
 
 /**
- * Stemmer, implementing the Porter Stemming Algorithm
- * <p/>
- * The Stemmer class transforms a word into its root form. The input word can be
- * provided a character at time (by calling add()), or at once by calling one of
- * the various stem(something) methods.
- *
- * @author Sepandar Kamvar (sdkamvar@stanford.edu)
+ * The Class Stemmer.
  */
 
 public class Stemmer {
     private char[] b;
     private int i, /* offset into b */
-            i_end, /* offset to end of stemmed word */
-            j, k;
+    i_end, /* offset to end of stemmed word */
+    j, k;
     private static final int INC = 50;
 
+    /**
+     * Instantiates a new stemmer.
+     */
     /* unit of size whereby b is increased */
     public Stemmer() {
         b = new char[INC];
@@ -27,8 +24,10 @@ public class Stemmer {
     }
 
     /**
-     * Add a character to the word being stemmed. When you are finished adding
-     * characters, you can call stem(void) to stem the word.
+     * Adds the.
+     *
+     * @param ch
+     *            the ch
      */
 
     private void add(final char ch) {
@@ -42,16 +41,23 @@ public class Stemmer {
         b[i++] = ch;
     }
 
-    /**
-     * After a word has been stemmed, it can be retrieved by toString(), or a
-     * reference to the internal buffer can be retrieved by getResultBuffer and
-     * getResultLength (which is generally more efficient.)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         return new String(b, 0, i_end);
     }
 
+    /**
+     * Cons.
+     *
+     * @param i
+     *            the i
+     * @return true, if successful
+     */
     /* cons(i) is true <=> b[i] is a consonant. */
     private final boolean cons(final int i) {
         switch (b[i]) {
@@ -77,6 +83,11 @@ public class Stemmer {
      * ....
      */
 
+    /**
+     * M.
+     *
+     * @return the int
+     */
     private final int m() {
         int n = 0;
         int i = 0;
@@ -117,6 +128,11 @@ public class Stemmer {
 
     /* vowelinstem() is true <=> 0,...j contains a vowel */
 
+    /**
+     * Vowelinstem.
+     *
+     * @return true, if successful
+     */
     private final boolean vowelinstem() {
         int i;
         for (i = 0; i <= j; i++) {
@@ -129,6 +145,13 @@ public class Stemmer {
 
     /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
 
+    /**
+     * Doublec.
+     *
+     * @param j
+     *            the j
+     * @return true, if successful
+     */
     private final boolean doublec(final int j) {
         if (j < 1) {
             return false;
@@ -148,6 +171,13 @@ public class Stemmer {
      *
      */
 
+    /**
+     * Cvc.
+     *
+     * @param i
+     *            the i
+     * @return true, if successful
+     */
     private final boolean cvc(final int i) {
         if (i < 2 || !cons(i) || cons(i - 1) || !cons(i - 2)) {
             return false;
@@ -161,6 +191,13 @@ public class Stemmer {
         return true;
     }
 
+    /**
+     * Ends.
+     *
+     * @param s
+     *            the s
+     * @return true, if successful
+     */
     private final boolean ends(final String s) {
         final int l = s.length();
         final int o = k - l + 1;
@@ -181,6 +218,12 @@ public class Stemmer {
      * k.
      */
 
+    /**
+     * Sets the to.
+     *
+     * @param s
+     *            the new to
+     */
     private void setto(final String s) {
         final int l = s.length();
         final int o = j + 1;
@@ -192,6 +235,12 @@ public class Stemmer {
 
     /* r(s) is used further down. */
 
+    /**
+     * R.
+     *
+     * @param s
+     *            the s
+     */
     private final void r(final String s) {
         if (m() > 0) {
             setto(s);
@@ -212,6 +261,9 @@ public class Stemmer {
      *
      */
 
+    /**
+     * Step 1.
+     */
     private void step1() {
         if (b[k] == 's') {
             if (ends("sses")) {
@@ -250,6 +302,9 @@ public class Stemmer {
 
     /* step2() turns terminal y to i when there is another vowel in the stem. */
 
+    /**
+     * Step 2.
+     */
     private final void step2() {
         if (ends("y") && vowelinstem()) {
             b[k] = 'i';
@@ -262,6 +317,9 @@ public class Stemmer {
      * give m() > 0.
      */
 
+    /**
+     * Step 3.
+     */
     private final void step3() {
         if (k == 0) {
             return; /* For Bug 1 */
@@ -371,6 +429,9 @@ public class Stemmer {
 
     /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
 
+    /**
+     * Step 4.
+     */
     private final void step4() {
         switch (b[k]) {
         case 'e':
@@ -414,6 +475,9 @@ public class Stemmer {
 
     /* step5() takes off -ant, -ence etc., in context <c>vcvc<v>. */
 
+    /**
+     * Step 5.
+     */
     private final void step5() {
         if (k == 0) {
             return; /* for Bug 1 */
@@ -474,7 +538,7 @@ public class Stemmer {
                 break;
             }
             return;
-        /* takes care of -ous */
+            /* takes care of -ous */
         case 's':
             if (ends("ism")) {
                 break;
@@ -513,6 +577,9 @@ public class Stemmer {
 
     /* step6() removes a final -e if m() > 1. */
 
+    /**
+     * Step 6.
+     */
     private final void step6() {
         j = k;
         if (b[k] == 'e') {
@@ -527,10 +594,7 @@ public class Stemmer {
     }
 
     /**
-     * Stem the word placed into the Stemmer buffer through calls to add().
-     * Returns true if the stemming process resulted in a word different from
-     * the input. You can retrieve the result with
-     * getResultLength()/getResultBuffer() or toString().
+     * Stem.
      */
     private void stem() {
         k = i - 1;
@@ -547,7 +611,11 @@ public class Stemmer {
     }
 
     /**
-     * Stems <code>s</code> and returns stemmed <code>String</code>.
+     * Stem.
+     *
+     * @param s
+     *            the s
+     * @return the string
      */
 
     public String stem(final String s) {
@@ -560,7 +628,11 @@ public class Stemmer {
     }
 
     /**
-     * Stems <code>w</code> and returns stemmed <code>Word</code>.
+     * Stem.
+     *
+     * @param w
+     *            the w
+     * @return the word
      */
 
     public Word stem(final Word w) {

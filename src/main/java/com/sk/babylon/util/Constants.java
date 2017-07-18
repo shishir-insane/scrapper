@@ -1,5 +1,8 @@
 package com.sk.babylon.util;
 
+/**
+ * The Class Constants.
+ */
 public final class Constants {
 
     public static final String DIGITS_INDEX_TEXT = "0-9";
@@ -21,6 +24,9 @@ public final class Constants {
     public static final String DATA_REFRESH_PARAM = "data-refresh";
     public static final int TOTAL_INDEX_PAGES = 27;
 
+    /**
+     * Instantiates a new constants.
+     */
     private Constants() {
         // hidden constructor
     }
