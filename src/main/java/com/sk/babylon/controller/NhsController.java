@@ -18,6 +18,9 @@ import com.sk.babylon.service.NhsService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class NhsController.
+ */
 @RestController
 @Slf4j
 public class NhsController {
@@ -37,6 +40,12 @@ public class NhsController {
     @Value("${nhs.data.stopwords}")
     private String nhsStopWordsFilePath;
 
+    /**
+     * Inits the nhs controller.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @PostConstruct
     public void initNhsController() throws IOException {
         final Resource resource = context.getResource(nhsDataFilePath);
@@ -47,6 +56,13 @@ public class NhsController {
         }
     }
 
+    /**
+     * Gets the data for choice.
+     *
+     * @param query
+     *            the query
+     * @return the data for choice
+     */
     @RequestMapping("/choice")
     public JSONObject getDataForChoice(@RequestParam("q") final String query) {
         return nhsService.getDataForChoice(query);

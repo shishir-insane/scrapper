@@ -8,13 +8,30 @@ import org.apache.commons.lang3.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class Utils.
+ */
 @Slf4j
 public final class Utils {
 
+    /**
+     * Instantiates a new utils.
+     */
     private Utils() {
         // Hidden constructor
     }
 
+    /**
+     * Regularize http in url.
+     *
+     * @param url
+     *            the url
+     * @param baseUrl
+     *            the base url
+     * @return the string
+     * @throws UnsupportedEncodingException
+     *             the unsupported encoding exception
+     */
     public static String regularizeHttpInUrl(final String url, final String baseUrl)
             throws UnsupportedEncodingException {
         String regularizedUrl = null;
@@ -28,6 +45,13 @@ public final class Utils {
         return StringUtils.defaultString(regularizedUrl);
     }
 
+    /**
+     * Gets the host url.
+     *
+     * @param baseUrl
+     *            the base url
+     * @return the host url
+     */
     public static String getHostUrl(final String baseUrl) {
         String hostUrl = null;
         try {

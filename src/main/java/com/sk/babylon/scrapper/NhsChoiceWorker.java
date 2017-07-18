@@ -21,14 +21,25 @@ import com.sk.babylon.util.Utils;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class NhsChoiceWorker.
+ */
 @Component
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NhsChoiceWorker implements Callable<JSONObject> {
 
-    private String nhsIndexURL;
+    private final String nhsIndexURL;
     private final String index;
 
+    /**
+     * Instantiates a new nhs choice worker.
+     *
+     * @param index
+     *            the index
+     * @param nhsIndexURL
+     *            the nhs index URL
+     */
     @Autowired
     public NhsChoiceWorker(final String index, final String nhsIndexURL) {
         log.info(nhsIndexURL);
@@ -37,11 +48,27 @@ public class NhsChoiceWorker implements Callable<JSONObject> {
         this.nhsIndexURL = nhsIndexURL;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.concurrent.Callable#call()
+     */
     @Override
     public JSONObject call() throws Exception {
         return doScrappingOnIndexPage(index);
     }
 
+    /**
+     * Do scrapping on index page.
+     *
+     * @param index
+     *            the index
+     * @return the JSON object
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws JSONException
+     *             the JSON exception
+     */
     @SuppressWarnings("unchecked")
     private JSONObject doScrappingOnIndexPage(final String index) throws IOException, JSONException {
         final JSONObject result = new JSONObject();
@@ -61,6 +88,17 @@ public class NhsChoiceWorker implements Callable<JSONObject> {
         return result;
     }
 
+    /**
+     * Do scrapping on condition page.
+     *
+     * @param conditionPageUrl
+     *            the condition page url
+     * @return the JSON object
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws JSONException
+     *             the JSON exception
+     */
     @SuppressWarnings("unchecked")
     private JSONObject doScrappingOnConditionPage(final String conditionPageUrl) throws IOException, JSONException {
         String title = null;
@@ -87,6 +125,17 @@ public class NhsChoiceWorker implements Callable<JSONObject> {
         return result;
     }
 
+    /**
+     * Do scrapping on sub section page.
+     *
+     * @param url
+     *            the url
+     * @param document
+     *            the document
+     * @return the JSON object
+     * @throws JSONException
+     *             the JSON exception
+     */
     @SuppressWarnings("unchecked")
     private JSONObject doScrappingOnSubSectionPage(final String url, final Document document) throws JSONException {
         JSONObject subSections = null;
@@ -120,6 +169,13 @@ public class NhsChoiceWorker implements Callable<JSONObject> {
         return subSections;
     }
 
+    /**
+     * Gets the document node from url.
+     *
+     * @param url
+     *            the url
+     * @return the document node from url
+     */
     private Document getDocumentNodeFromUrl(final String url) {
         Document document = null;
         if (StringUtils.isNotBlank(url)) {
