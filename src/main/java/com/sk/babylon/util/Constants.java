@@ -19,6 +19,7 @@ public final class Constants {
     public static final String INRO_DATA_FIELD = "Introduction";
     public static final String URL_FIELD = "URL";
     public static final String DATA_REFRESH_PARAM = "data-refresh";
+    public static final int TOTAL_INDEX_PAGES = 27;
 
     private Constants() {
         // hidden constructor

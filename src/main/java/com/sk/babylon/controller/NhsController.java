@@ -4,12 +4,13 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sk.babylon.scrapper.NhsChoiceScrapper;
@@ -47,7 +48,7 @@ public class NhsController {
     }
 
     @RequestMapping("/choice")
-    public JSONObject getDataForChoice(final String query) {
-        return null;
+    public JSONObject getDataForChoice(@RequestParam("q") final String query) {
+        return nhsService.getDataForChoice(query);
     }
 }

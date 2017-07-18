@@ -31,6 +31,8 @@ nhs:
   index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
   data:
     refresh: true
+    thread:
+      count: 5
     file: classpath:data/data.json
     stopwords: classpath:data/stopwords.txt
     
@@ -42,5 +44,7 @@ nhs:
   index: http://www.nhs.uk/Conditions/Pages/BodyMap.aspx
   data:
     refresh: false
+    thread:
+      count: 5
     file: classpath:data/data.json
     stopwords: classpath:data/stopwords.txt
