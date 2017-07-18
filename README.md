@@ -1,15 +1,20 @@
-# scrapper
+# nhs-scrapper
 
-Run with data refresh:
+###Run with data refresh:
 mvn spring-boot:run -Drun.profiles=data-refresh
 
-Run without data refresh:
-mvn spring-boot:run
+###Run without data refresh:
+###mvn spring-boot:run
 
 Enpooint Request:
+
+```
 http://localhost:8080/nhs-scrapper/choice?q=How to treat zika virus
+```
 
 Endpoint response:
+
+```
 {
   "response": {
     "Introduction": {
@@ -30,3 +35,4 @@ Endpoint response:
   },
   "query": "How to treat zika virus"
 }
+```
